@@ -1,28 +1,35 @@
 package com.bhk.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import com.bhk.cbbkng.BookingCab;
 import com.bhk.cbbkng.CabService;
+import com.bhk.cbbkng.CancelCab;
+import com.bhk.entity.BookingRequest;
+import com.bhk.entity.Cab;
 import com.bhk.entity.Customer;
+import com.bhk.utils.BookingServiceConstraints;
 
 public class BookingService {
-	public static List<CabService> cabServiceBooking;
-	public static List<CabService> cabServiceCancel;
+	private CabService[] cabService;	
+	private BookingRequest bookingRequest = BookingRequest.getInstance();
+	
 	
 	public BookingService() {
-		cabService = new ArrayList<CabService>();
+		cabService = new CabService[2];	
+		cabService[0] = new BookingCab();
+		cabService[1] = new CancelCab();
+	}	
+	
+	
+	public void bookCab(String bookingId, String pickupArea, String dropArea, Date dtPickUpTime) {		
+		this.cabService[0].execute(bookingId, pickupArea, dropArea, dtPickUpTime);
 	}
 	
-	public void setCabBooking(CabService bookCabService, CabService calcelokCabService) {
-		this.cabService.add(arg0)
-	}
-	
-	public boolean bookCab(String loaction, Customer customer, CabService bookCabService) {
-		 return true;
-	}
-	
-	public boolean cabcelCab(String loaction, Customer customer, CabService calcelokCabService) {
-		 return true;
+	public void cabcelCab(String bookingId, String pickupArea, String dropArea, Date dtPickUpTime) {
+		this.cabService[1].execute(bookingId, pickupArea, dropArea, dtPickUpTime);
 	} 
 }
